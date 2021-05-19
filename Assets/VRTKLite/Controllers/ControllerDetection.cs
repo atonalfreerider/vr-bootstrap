@@ -199,6 +199,7 @@ namespace VRTKLite.Controllers
                     ctrMat);
                 ctrGameObject.transform.SetParent(mount.transform, false);
                 ctrGameObject.transform.Rotate(Vector3.up, 180);
+                ctrGameObject.transform.Translate(Vector3.back * 0.1f, Space.Self);
             }
             else if (deviceName.Contains("chirp"))
             {

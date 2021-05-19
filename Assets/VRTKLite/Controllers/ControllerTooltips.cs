@@ -40,12 +40,12 @@ namespace VRTKLite.Controllers
                 return;
             }
 
-            CreateTooltipFor(controllerButtonMapper, ControllerElements.Trigger, TextAlignmentOptions.Right);
-            CreateTooltipFor(controllerButtonMapper, ControllerElements.GripLeft, TextAlignmentOptions.Right);
-            CreateTooltipFor(controllerButtonMapper, ControllerElements.Touchpad, TextAlignmentOptions.Left);
-            CreateTooltipFor(controllerButtonMapper, ControllerElements.ButtonOne, TextAlignmentOptions.Left);
-            CreateTooltipFor(controllerButtonMapper, ControllerElements.ButtonTwo, TextAlignmentOptions.Right);
-            CreateTooltipFor(controllerButtonMapper, ControllerElements.StartMenu, TextAlignmentOptions.Right);
+            CreateTooltipFor(controllerButtonMapper, ControllerElements.Trigger, TextAlignmentOptions.Right, isRight);
+            CreateTooltipFor(controllerButtonMapper, ControllerElements.GripLeft, TextAlignmentOptions.Right, isRight);
+            CreateTooltipFor(controllerButtonMapper, ControllerElements.Touchpad, TextAlignmentOptions.Left, isRight);
+            CreateTooltipFor(controllerButtonMapper, ControllerElements.ButtonOne, TextAlignmentOptions.Left, isRight);
+            CreateTooltipFor(controllerButtonMapper, ControllerElements.ButtonTwo, TextAlignmentOptions.Right, isRight);
+            CreateTooltipFor(controllerButtonMapper, ControllerElements.StartMenu, TextAlignmentOptions.Right, isRight);
 
             isLoaded = true;
         }
@@ -71,9 +71,17 @@ namespace VRTKLite.Controllers
             }
         }
 
-        void CreateTooltipFor(ControllerButtonMap controllerButtonMapper, ControllerElements element, TextAlignmentOptions align)
+        void CreateTooltipFor(ControllerButtonMap controllerButtonMapper, ControllerElements element,
+            TextAlignmentOptions align, bool isRight)
         {
             Vector3 buttonPosition = controllerButtonMapper.GetElementPosition(element);
+
+            //Index specific tooltip code:
+            if (!isRight && controllerType == ControllerType.ValveIndex)
+            {
+                buttonPosition.x = -buttonPosition.x;
+            }
+
             TextBox tooltip = TextBox.Create(
                 "",
                 align);
@@ -84,7 +92,8 @@ namespace VRTKLite.Controllers
             {
                 case ControllerType.ViveWand:
                 case ControllerType.ValveIndex:
-                    tooltip.transform.Rotate(Vector3.right * 70);
+                    tooltip.transform.Rotate(Vector3.right * 80);
+                    tooltip.transform.Translate(Vector3.up * 0.06f, Space.Self);
                     break;
                 case ControllerType.RiftTouch:
                     tooltip.transform.Rotate(Vector3.right * 20);
