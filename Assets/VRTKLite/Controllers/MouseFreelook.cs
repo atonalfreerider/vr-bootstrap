@@ -15,7 +15,7 @@ namespace VRTKLite.Controllers
         // From:
         // http://answers.unity3d.com/questions/29741/mouse-look-script.html
 
-        const float Sensitivity = 15f;
+        const float Sensitivity = 1f;
 
         const float MinimumXRotation = -360f;
         const float MaximumXRotation = 360f;
@@ -28,12 +28,12 @@ namespace VRTKLite.Controllers
         void Update()
         {
             // Rotate the camera on right click
-            if (Input.GetMouseButton(1))
+            if (Mouse.current.rightButton.isPressed)
             {
                 // Read the mouse input axis
                 rotation += new Vector2(
-                    Input.GetAxis("Mouse X"),
-                    Input.GetAxis("Mouse Y")) * Sensitivity;
+                    Mouse.current.delta.x.ReadValue(),
+                    Mouse.current.delta.y.ReadValue()) * Sensitivity;
                 rotation.x = ClampAngle(
                     rotation.x,
                     MinimumXRotation,
@@ -48,8 +48,6 @@ namespace VRTKLite.Controllers
                     Quaternion.AngleAxis(rotation.y, -Vector3.right);
                 transform.localRotation = xQuaternion * yQuaternion;
             }
-
-            MoveCamera();
         }
 
         static float ClampAngle(float angle, float min, float max)
@@ -65,43 +63,6 @@ namespace VRTKLite.Controllers
             }
 
             return Mathf.Clamp(angle, min, max);
-        }
-
-        void MoveCamera()
-        {
-            if (Keyboard.current.wKey.isPressed)
-            {
-                transform.position +=
-                    transform.forward.normalized * Time.deltaTime;
-            }
-
-            if (Keyboard.current.aKey.isPressed)
-            {
-                transform.position -=
-                    transform.right.normalized * Time.deltaTime;
-            }
-
-            if (Keyboard.current.sKey.isPressed)
-            {
-                transform.position -=
-                    transform.forward.normalized * Time.deltaTime;
-            }
-
-            if (Keyboard.current.dKey.isPressed)
-            {
-                transform.position +=
-                    transform.right.normalized * Time.deltaTime;
-            }
-
-            if (Keyboard.current.qKey.isPressed)
-            {
-                transform.position += Vector3.down * Time.deltaTime;
-            }
-
-            if (Keyboard.current.eKey.isPressed)
-            {
-                transform.position += Vector3.up * Time.deltaTime;
-            }
         }
     }
 }
