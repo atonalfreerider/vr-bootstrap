@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
 
@@ -10,12 +11,12 @@ namespace VRTKLite.SDK
         /// Assigned In Unity Editor and contains all Camera Rigs for each VR ecosystem.
         /// </summary>
         [Tooltip("The list of SDK Setups to choose from.")]
-        public GameObject[] Setups = new GameObject[0];
+        public GameObject[] Setups = Array.Empty<GameObject>();
 
         /// <summary>
         /// DeviceModel to be confirmed
         /// </summary>
-        static readonly HashSet<string> OpenVR_HMDs = new HashSet<string>()
+        static readonly HashSet<string> OpenVR_HMDs = new()
         {
             "vivemv", "vivedvt", "vive_promv", "index"
         };
@@ -23,7 +24,7 @@ namespace VRTKLite.SDK
         /// <summary>
         /// DeviceModel to be confirmed
         /// </summary>
-        static readonly HashSet<string> OVR_HMDs = new HashSet<string>()
+        static readonly HashSet<string> OVR_HMDs = new()
         {
             "oculusriftcv1", "oculusriftes07", "oculusrifts"
         };
@@ -31,7 +32,7 @@ namespace VRTKLite.SDK
         /// <summary>
         /// These are known to be the device models for WaveVR headsets
         /// </summary>
-        static readonly HashSet<string> WaveVR_HMDs = new HashSet<string>()
+        static readonly HashSet<string> WaveVR_HMDs = new()
         {
             "HTC Vive Focus", "HTC Vive Focus Plus"
         };
@@ -39,7 +40,7 @@ namespace VRTKLite.SDK
         /// <summary>
         /// DeviceModel to be confirmed
         /// </summary>
-        static readonly HashSet<string> WindowsMR_HMDs = new HashSet<string>()
+        static readonly HashSet<string> WindowsMR_HMDs = new()
         {
             "acerah100", "lenovoexplorer", "hpwindowsmixedrealityheadset", "samsungwindowsmixedreality800ZAA"
         };

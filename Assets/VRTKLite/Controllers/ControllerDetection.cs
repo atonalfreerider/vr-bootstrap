@@ -28,7 +28,7 @@ namespace VRTKLite.Controllers
         public event Action LeftModelOff;
         public event Action RightModelOff;
 
-        readonly HashSet<string> touchpadControllers = new HashSet<string>
+        readonly HashSet<string> touchpadControllers = new()
         {
             "vive", "chirp", "mi6","mia", "aspen", "oculusgo"
         };
@@ -241,7 +241,7 @@ namespace VRTKLite.Controllers
         static GameObject ControllerModel(string path, Material mat)
         {
             Mesh ctrMesh = Resources.Load<Mesh>(path);
-            GameObject ctrGameObject = new GameObject(path);
+            GameObject ctrGameObject = new(path);
             MeshFilter filter = ctrGameObject.AddComponent<MeshFilter>();
             filter.mesh = ctrMesh;
             MeshRenderer meshRend = ctrGameObject.AddComponent<MeshRenderer>();
@@ -254,12 +254,12 @@ namespace VRTKLite.Controllers
         static GameObject ControllerModelAndChildren(string path, Material mat)
         {
             Mesh[] ctrMeshes = Resources.LoadAll<Mesh>(path);
-            GameObject ctrGameObject = new GameObject(path);
+            GameObject ctrGameObject = new(path);
             Material thisMat = mat;
 
             foreach (Mesh ctrMesh in ctrMeshes)
             {
-                GameObject ctrGameObjectChild = new GameObject(ctrMesh.name);
+                GameObject ctrGameObjectChild = new(ctrMesh.name);
                 MeshFilter filter = ctrGameObjectChild.AddComponent<MeshFilter>();
                 filter.mesh = ctrMesh;
                 MeshRenderer meshRend = ctrGameObjectChild.AddComponent<MeshRenderer>();

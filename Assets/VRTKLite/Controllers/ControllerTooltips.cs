@@ -10,7 +10,7 @@ namespace VRTKLite.Controllers
         ControllerType controllerType = ControllerType.None;
 
         readonly Dictionary<ControllerElements, TextBox> tooltips =
-            new Dictionary<ControllerElements, TextBox>();
+            new();
 
         bool isLoaded = false;
         bool IsRight;
