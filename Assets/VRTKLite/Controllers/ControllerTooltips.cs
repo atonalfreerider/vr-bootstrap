@@ -122,50 +122,45 @@ namespace VRTKLite.Controllers
             // Ideally, we never call this method before the tooltips are loaded. However, as a stop-gap measure while
             // we are still using VRTK, the `isLoaded` check will be sufficient until we have a need for a more advanced
             // solution (such as using a coroutine).
-            if (isLoaded)
+            if (isLoaded && tooltips.ContainsKey(element))
             {
-                try
+                if (string.IsNullOrEmpty(text))
                 {
-                    if (string.IsNullOrEmpty(text))
+                    tooltips[element].Text = "";
+                    tooltips[element].gameObject.SetActive(false);
+                    return;
+                }
+
+                string final = "";
+                int count = 1;
+                bool breakSpace = false;
+                char priorChar = ' ';
+                foreach (char c in text)
+                {
+                    final += c;
+                    if (count % 15 == 0)
                     {
-                        tooltips[element].Text = "";
-                        tooltips[element].gameObject.SetActive(false);
-                        return;
+                        // next break separator is getting a newline appended
+                        breakSpace = true;
                     }
 
-                    string final = "";
-                    int count = 1;
-                    bool breakSpace = false;
-                    char priorChar = ' ';
-                    foreach (char c in text)
+                    if (breakSpace &&
+                        priorChar != '<' && // TMP tag escape
+                        c is ' ' or '/' or '\\') // break separators
                     {
-                        final += c;
-                        if (count % 15 == 0)
-                        {
-                            // next break separator is getting a newline appended
-                            breakSpace = true;
-                        }
-
-                        if (breakSpace &&
-                            priorChar != '<' && // TMP tag escape
-                            (c == ' ' || c == '/' || c == '\\')) // break separators
-                        {
-                            final += '\n';
-                            breakSpace = false;
-                        }
-
-                        priorChar = c;
-                        count++;
+                        final += '\n';
+                        breakSpace = false;
                     }
 
-                    tooltips[element].Text = final;
-                    ShowToolTip(tooltips[element].gameObject);
+                    priorChar = c;
+                    count++;
                 }
-                catch (KeyNotFoundException e)
-                {
-                }
+
+                tooltips[element].Text = final;
+                ShowToolTip(tooltips[element].gameObject);
             }
         }
+        
         void HideToolTips()
         {
             foreach (TextBox tb in tooltips.Values)

@@ -7,34 +7,20 @@ namespace VRTKLite.Controllers.ButtonMaps
     {
         public override Vector3 GetElementPosition(ControllerElements element)
         {
-            switch (element)
+            return element switch
             {
-                case ControllerElements.AttachPoint:
-                    return Vector3.zero;
-                case ControllerElements.Trigger:
-                    return new Vector3(0, -.035f, -.05f);
-                case ControllerElements.GripLeft:
-                    return new Vector3(-.02f, -.015f, .1f);
-                case ControllerElements.GripRight:
-                    return new Vector3(.02f, -.015f, .1f);
-                case ControllerElements.Touchpad:
-                    return new Vector3(0, .005f, -.05f);
-                case ControllerElements.ButtonOne:
-                    return new Vector3(0, .005f, -.05f);
-                case ControllerElements.ButtonTwo:
-                    return new Vector3(0, .005f, -.02f);
-                case ControllerElements.Body:
-                    return Vector3.zero;
-                case ControllerElements.StartMenu:
-                    return Vector3.zero;
-                case ControllerElements.SystemMenu:
-                    return new Vector3(0, .005f, -.1f);
-                default:
-                    throw new ArgumentOutOfRangeException(
-                        nameof(element),
-                        element,
-                        null);
-            }
+                ControllerElements.AttachPoint => Vector3.zero,
+                ControllerElements.Trigger => new Vector3(0, -.035f, -.05f),
+                ControllerElements.GripLeft => new Vector3(-.02f, -.015f, .1f),
+                ControllerElements.GripRight => new Vector3(.02f, -.015f, .1f),
+                ControllerElements.Touchpad => new Vector3(0, .005f, -.05f),
+                ControllerElements.ButtonOne => new Vector3(0, .005f, -.05f),
+                ControllerElements.ButtonTwo => new Vector3(0, .005f, -.02f),
+                ControllerElements.Body => Vector3.zero,
+                ControllerElements.StartMenu => Vector3.zero,
+                ControllerElements.SystemMenu => new Vector3(0, .005f, -.1f),
+                _ => throw new ArgumentOutOfRangeException(nameof(element), element, null)
+            };
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
@@ -51,6 +51,8 @@ namespace VRTKLite.SDK
 
         LoadedVRSetupChangeEventHandler loadedVRSetupChanged;
 
+        public static bool IsVRMode;
+
         public event LoadedVRSetupChangeEventHandler LoadedVRSetupChanged
         {
             add
@@ -86,12 +88,14 @@ namespace VRTKLite.SDK
                 {
                     // special case...for some reason xrDisplay.running is false. this might change in a future release
                     LoadHeadsetFromName(xrDisplay.SubsystemDescriptor.id);
+                    IsVRMode = true;
                     return;
                 }
 
                 if (xrDisplay.running &&
                     LoadHeadsetFromName(xrDisplay.SubsystemDescriptor.id))
                 {
+                    IsVRMode = true;
                     return;
                 }
             }
@@ -102,6 +106,7 @@ namespace VRTKLite.SDK
                 if (sdkSetup.name == "Simulator")
                 {
                     EnableAssociatedSDKSetup(sdkSetup);
+                    IsVRMode = false;
                     return;
                 }
             }
