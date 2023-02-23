@@ -201,6 +201,15 @@ namespace VRTKLite.Controllers
                 ctrGameObject.transform.Rotate(Vector3.up, 180);
                 ctrGameObject.transform.Translate(Vector3.back * 0.1f, Space.Self);
             }
+            else if (deviceName.Contains("wvr_cr"))
+            {
+                string hand = isRight ? "right" : "left";
+                ctrGameObject = Instantiate(
+                    Resources.Load(
+                        $"Meshes/Wave/SUE/SUE_controller_{hand}") as GameObject);
+                ctrGameObject.transform.SetParent(mount.transform, false);
+                ctrGameObject.transform.Rotate(Vector3.up, 180f);
+            }
             else if (deviceName.Contains("chirp"))
             {
                 string hand = isRight ? "R" : "L";

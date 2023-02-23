@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace VRTKLite.Controllers.ButtonMaps
@@ -11,30 +12,20 @@ namespace VRTKLite.Controllers.ButtonMaps
         
         protected override string ElementPath(ControllerElements element)
         {
-            switch (element)
+            return element switch
             {
-                case ControllerElements.Trigger:
-                    return "Trigger";
-                case ControllerElements.Touchpad:
-                case ControllerElements.ButtonOne:
-                    return "TouchPad";
-                case ControllerElements.ButtonTwo:
-                    return "AppButton";
-                case ControllerElements.SystemMenu:
-                    return "HomeButton";
-                case ControllerElements.Body:
-                    return "Body";
-                case ControllerElements.StartMenu:
-                    return null;
-                case ControllerElements.AttachPoint:
-                    break;
-                case ControllerElements.GripLeft:
-                    return "Grip";
-                case ControllerElements.GripRight:
-                    return "Grip";
-            }
-
-            return "";
+                ControllerElements.Trigger => "Trigger",
+                ControllerElements.ButtonOne => "TouchPad",
+                ControllerElements.Touchpad => "TouchPad",
+                ControllerElements.ButtonTwo => "AppButton",
+                ControllerElements.SystemMenu => "HomeButton",
+                ControllerElements.Body => "Body",
+                ControllerElements.GripLeft => "Grip",
+                ControllerElements.GripRight => "Grip",
+                ControllerElements.AttachPoint => null,
+                ControllerElements.StartMenu => null,
+                _ => throw new ArgumentOutOfRangeException(nameof(element), element, null)
+            };
         }
     }
 }

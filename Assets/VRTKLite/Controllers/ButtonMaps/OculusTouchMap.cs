@@ -19,34 +19,20 @@ namespace VRTKLite.Controllers.ButtonMaps
 
         protected override string ElementPath(ControllerElements element)
         {
-            switch (element)
+            return element switch
             {
-                case ControllerElements.AttachPoint:
-                    return null;
-                case ControllerElements.Trigger:
-                    return $"{Prefix}:b_trigger";
-                case ControllerElements.GripLeft:
-                    return $"{Prefix}:b_hold";
-                case ControllerElements.GripRight:
-                    return $"{Prefix}:b_hold";
-                case ControllerElements.Touchpad:
-                    return $"{Prefix}:b_stick";
-                case ControllerElements.ButtonOne:
-                    return $"{Prefix}:b_button01";
-                case ControllerElements.ButtonTwo:
-                    return $"{Prefix}:b_button02";
-                case ControllerElements.Body:
-                    return null;
-                case ControllerElements.StartMenu:
-                    return null;
-                case ControllerElements.SystemMenu:
-                    return $"{Prefix}:b_button03";
-                default:
-                    throw new ArgumentOutOfRangeException(
-                        nameof(element),
-                        element,
-                        null);
-            }
+                ControllerElements.AttachPoint => null,
+                ControllerElements.Trigger => $"{Prefix}:b_trigger",
+                ControllerElements.GripLeft => $"{Prefix}:b_hold",
+                ControllerElements.GripRight => $"{Prefix}:b_hold",
+                ControllerElements.Touchpad => $"{Prefix}:b_stick",
+                ControllerElements.ButtonOne => $"{Prefix}:b_button01",
+                ControllerElements.ButtonTwo => $"{Prefix}:b_button02",
+                ControllerElements.Body => null,
+                ControllerElements.StartMenu => null,
+                ControllerElements.SystemMenu => $"{Prefix}:b_button03",
+                _ => throw new ArgumentOutOfRangeException(nameof(element), element, null)
+            };
         }
     }
 }

@@ -25,6 +25,7 @@ namespace VRTKLite.Controllers
         bool isUpButtonPressed, isRightButtonPressed, isDownButtonPressed, isLeftButtonPressed;
         bool isTriggerPressed;
         public bool IsGripPressed;
+        public bool isPrimaryAxisHeld;
 
         public bool IsRightButtonPressed => isRightButtonPressed;
 
@@ -40,7 +41,13 @@ namespace VRTKLite.Controllers
         public event Action TriggerPressed, TriggerReleased;
         public event Action GripPressed, GripReleased;
 
+        public event Action<Vector2> PrimaryAxisHeld;
+
         #endregion
+
+        public delegate void AxisHeldAction();
+        public AxisHeldAction OnAxisHeldStart { get; set; }
+        public AxisHeldAction OnAxisHeldStop { get; set; }
 
         // Calibration
         [Tooltip("Percentage the trigger must be pushed in to register as a press.")]
@@ -254,6 +261,11 @@ namespace VRTKLite.Controllers
             isRightButtonPressed = false;
             isDownButtonPressed = false;
             isLeftButtonPressed = false;
+            if (isPrimaryAxisHeld)
+            {
+                OnAxisHeldStop?.Invoke();
+            }
+            isPrimaryAxisHeld = false;
         }
 
         void CheckAxis()
@@ -281,6 +293,15 @@ namespace VRTKLite.Controllers
                         isUpButtonPressed = true;
                         UpButtonPressed?.Invoke();
                     }
+                    else
+                    {
+                        if (!isPrimaryAxisHeld)
+                        {
+                            isPrimaryAxisHeld = true;
+                            OnAxisHeldStart?.Invoke();
+                        }
+                        PrimaryAxisHeld?.Invoke(primaryAxis);
+                    }
 
                     break;
                 case Direction.Right:
@@ -288,6 +309,10 @@ namespace VRTKLite.Controllers
                     {
                         isRightButtonPressed = true;
                         RightButtonPressed?.Invoke();
+                    }
+                    else
+                    {
+                        PrimaryAxisHeld?.Invoke(primaryAxis);
                     }
 
                     break;
@@ -297,6 +322,15 @@ namespace VRTKLite.Controllers
                         isDownButtonPressed = true;
                         DownButtonPressed?.Invoke();
                     }
+                    else
+                    {
+                        if (!isPrimaryAxisHeld)
+                        {
+                            isPrimaryAxisHeld = true;
+                            OnAxisHeldStart?.Invoke();
+                        }
+                        PrimaryAxisHeld?.Invoke(primaryAxis);
+                    }
 
                     break;
                 case Direction.Left:
@@ -304,6 +338,10 @@ namespace VRTKLite.Controllers
                     {
                         isLeftButtonPressed = true;
                         LeftButtonPressed?.Invoke();
+                    }
+                    else
+                    {
+                        PrimaryAxisHeld?.Invoke(primaryAxis);
                     }
 
                     break;
@@ -319,6 +357,15 @@ namespace VRTKLite.Controllers
             CheckSecondary();
             CheckGrip();
             CheckAxis();
+        }
+
+        public void PlayHapticFeedbackImpulse(float amplitude, float duration)
+        {
+            myInputDevice.TryGetHapticCapabilities(out HapticCapabilities capabilities);
+            if (capabilities.supportsImpulse)
+            {
+                myInputDevice.SendHapticImpulse(0u, amplitude, duration);
+            }
         }
     }
 }

@@ -51,7 +51,6 @@ namespace VRTKLite.Controllers
         StartMenu
     }
 
-
     public enum ControllerType
     {
         None = -1,
@@ -62,7 +61,8 @@ namespace VRTKLite.Controllers
         WaveVRController = 4,
         ValveIndex = 5,
         OculusTouchForQuestOrRiftS = 6,
-        Cosmos = 7
+        Cosmos = 7,
+        WaveSunrise = 8
     }
 
     public static class ControllerTypeExtensions
@@ -101,6 +101,11 @@ namespace VRTKLite.Controllers
                 return ControllerType.WindowsMotion;
             }
 
+            if (controller.Contains("wvr_cr"))
+            {
+                return ControllerType.WaveSunrise;
+            }
+            
             if (controller.Contains("wvr") || controller.Contains("finch"))
             {
                 return ControllerType.WaveVRController;
@@ -121,30 +126,20 @@ namespace VRTKLite.Controllers
             GameObject controllerModel)
         {
             ControllerType controllerType = ControllerTypesFromString(controllerName);
-            switch(controllerType)
+            return controllerType switch
             {
-                case ControllerType.None:
-                    return null;
-                case ControllerType.Unknown:
-                    return null;
-                case ControllerType.ViveWand:
-                    return new ViveMap();
-                case ControllerType.Cosmos:
-                    return new CosmosMap();
-                case ControllerType.ValveIndex:
-                    return new KnucklesMap();
-                case ControllerType.RiftTouch:
-                    return new OculusTouchMap(controllerModel, isRight);
-                case ControllerType.OculusTouchForQuestOrRiftS:
-                    return new OculusTouchForQuestOrRiftSMap();
-                case ControllerType.WindowsMotion:
-                    return null;
-                case ControllerType.WaveVRController:
-                    return new WaveVRControllerMap(controllerModel);
-                default:
-                    throw new ArgumentOutOfRangeException(
-                        nameof(controllerName), controllerName, null);
-            }
+                ControllerType.None => null,
+                ControllerType.Unknown => null,
+                ControllerType.ViveWand => new ViveMap(),
+                ControllerType.Cosmos => new CosmosMap(),
+                ControllerType.ValveIndex => new KnucklesMap(),
+                ControllerType.RiftTouch => new OculusTouchMap(controllerModel, isRight),
+                ControllerType.OculusTouchForQuestOrRiftS => new OculusTouchForQuestOrRiftSMap(),
+                ControllerType.WindowsMotion => null,
+                ControllerType.WaveVRController => new WaveVRControllerMap(controllerModel),
+                ControllerType.WaveSunrise => new WaveSunriseControllerMap(controllerModel, isRight),
+                _ => throw new ArgumentOutOfRangeException(nameof(controllerName), controllerName, null)
+            };
         }
     }
 }
