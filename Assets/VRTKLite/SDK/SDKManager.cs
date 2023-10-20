@@ -72,7 +72,7 @@ namespace VRTKLite.SDK
         {
             // iterate through setups
             List<XRInputSubsystem> xrInputSubsystems = new List<XRInputSubsystem>();
-            SubsystemManager.GetInstances(xrInputSubsystems);
+            SubsystemManager.GetSubsystems(xrInputSubsystems);
 
             foreach (XRInputSubsystem xrInputSubsystem in xrInputSubsystems)
             {
@@ -80,7 +80,7 @@ namespace VRTKLite.SDK
             }
 
             List<XRDisplaySubsystem> xrDisplaySubsystems = new List<XRDisplaySubsystem>();
-            SubsystemManager.GetInstances(xrDisplaySubsystems);
+            SubsystemManager.GetSubsystems(xrDisplaySubsystems);
 
             foreach (XRDisplaySubsystem xrDisplay in xrDisplaySubsystems)
             {
