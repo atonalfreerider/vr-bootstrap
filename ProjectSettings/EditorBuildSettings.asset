@@ -12,6 +12,7 @@ EditorBuildSettings:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: d576551ab8530fb4d9a84573163b3a02, type: 2}
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: d5ed0e52ed5ca754397ec34ed0d1005f, type: 2}
     com.htc.upm.wave.xrsdk.xrsettings: {fileID: 11400000, guid: cace3ec1f80deaf4b9df14ddaf697ea8, type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 9a5d71e7aaba38b4f9c7af39cef29fd2, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: a31b65cdf49eae748bbe83b32794483f, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 707d6415d91523545aa09fd3bdde237a, type: 2}
   m_UseUCBPForAssetBundles: 0
