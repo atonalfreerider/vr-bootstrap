@@ -1,112 +1,78 @@
-using System.Linq;
+﻿using System.Linq;
 using TMPro;
 using UnityEngine;
 
-namespace VRTKLite
+/// <summary>
+/// This is a wrapper for a <see cref="TextMeshPro"/> TextMeshPro that is attached to the prefab that is
+/// instantiated every time a new TextBox is created.
+/// </summary>
+public class TextBox : MonoBehaviour
 {
-    public class Font
+    static TextBox TextBoxPrefab;
+        
+    // Components - Attached in Unity Editor
+    public TextMeshPro TextField;
+     
+    public TextAlignmentOptions Alignment
     {
-        public readonly TMP_FontAsset Typeface;
-        public readonly float Size;
-        public readonly Color Color;
-
-        public Font(TMP_FontAsset typeface, float size, Color color)
+        get => TextField.alignment;
+        set
         {
-            Typeface = typeface;
-            Size = size;
+            TextField.alignment = value;
 
-            // Bug: for TextMesh Pro, colors must be linearized before they are displayed on Windows.
-            // See: http://digitalnativestudios.com/forum/index.php?topic=1773.0
-            // While Android builds use Gamma color space, no modification is needed.
-#if UNITY_ANDROID && !UNITY_EDITOR
-            Color = QualitySettings.activeColorSpace == ColorSpace.Linear ? color.linear : color;
-#else
-            Color = color.linear;
-#endif
+            TextField.rectTransform.pivot = value switch
+            {
+                TextAlignmentOptions.Right => new Vector2(1, 0.5f),
+                TextAlignmentOptions.Center => new Vector2(0.5f, 0.5f),
+                TextAlignmentOptions.TopLeft => new Vector2(0, 1),
+                TextAlignmentOptions.Top => new Vector2(0.5f, 1),
+                TextAlignmentOptions.Left => new Vector2(0, 0.5f),
+                _ => new Vector2(0, 0.5f) // default left
+            };
         }
     }
 
-    public class TextBox : MonoBehaviour
+    public string Text
     {
-        // Components - Attached in Unity Editor
-        public TextMeshPro TextField;
+        set => TextField.SetText(value);
+    }
 
-        public TextAlignmentOptions Alignment
+    #region Font Setters
+
+    public float Size
+    {
+        set => TextField.fontSize = value;
+    }
+
+    public Color Color
+    {
+        set => TextField.color = value;
+    }
+
+    #endregion
+
+    public void SetFixedWithWrap(float width)
+    {
+        TextField.autoSizeTextContainer = false;
+        TextField.textWrappingMode = TextWrappingModes.Normal;
+        TextField.rectTransform.sizeDelta = new Vector2(width, 0f);
+    }
+
+    public static TextBox Create(
+        string text,
+        TextAlignmentOptions align = TextAlignmentOptions.Left)
+    {
+        if (TextBoxPrefab == null)
         {
-            get => TextField.alignment;
-            set
-            {
-                TextField.alignment = value;
-
-                switch (value)
-                {
-                    case TextAlignmentOptions.Right:
-                        TextField.rectTransform.pivot = new Vector2(1, 0.5f);
-                        break;
-                    case TextAlignmentOptions.Center:
-                        TextField.rectTransform.pivot = new Vector2(0.5f, 0.5f);
-                        break;
-                    case TextAlignmentOptions.TopLeft:
-                        TextField.rectTransform.pivot = new Vector2(0, 1);
-                        break;
-                    case TextAlignmentOptions.Top:
-                        TextField.rectTransform.pivot = new Vector2(0.5f, 1);
-                        break;
-                    default:
-                        TextField.rectTransform.pivot = new Vector2(0, 0.5f);
-                        break;
-                }
-            }
+            TextBoxPrefab = Resources.Load<TextBox>("TextBox");
         }
 
-        public string Text
-        {
-            set => TextField.SetText(value);
-        }
+        TextBox textBox = Instantiate(TextBoxPrefab);
+        textBox.name = $"TextBox: {text.Split('\n').First()}";
 
-        #region Font Setters
+        textBox.Alignment = align;
+        textBox.Text = text;
 
-        public Font Font
-        {
-            set
-            {
-                TextField.font = value.Typeface;
-                TextField.fontSize = value.Size;
-                TextField.color = value.Color;
-            }
-        }
-
-        public float Size
-        {
-            set => TextField.fontSize = value;
-        }
-
-        public Color Color
-        {
-            set => TextField.color = value;
-        }
-
-        #endregion
-
-        public void SetFixedWithWrap(Vector2 size)
-        {
-            TextField.autoSizeTextContainer = false;
-            TextField.enableWordWrapping = true;
-            TextField.rectTransform.sizeDelta = size;
-        }
-
-        public static TextBox Create(
-            string text,
-            TextAlignmentOptions align)
-        {
-            GameObject textboxPrefab = Instantiate(Resources.Load("TextBox") as GameObject);
-            TextBox textBox = textboxPrefab.GetComponent<TextBox>();
-            textBox.name = $"TextBox: {text.Split('\n').First()}";
-
-            textBox.Alignment = align;
-            textBox.Text = text;
-
-            return textBox;
-        }
+        return textBox;
     }
 }
