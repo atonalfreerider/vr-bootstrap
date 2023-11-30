@@ -135,9 +135,7 @@ namespace VRTKLite.Controllers
         {
             string deviceName = inputDevice.name.ToLowerInvariant();
             GameObject ctrGameObject = null;
-            if (deviceName.Contains("quest") || 
-                deviceName.Contains("rifts") ||
-                deviceName.Contains("oculus touch controller openxr"))
+            if (deviceName.Contains("quest"))
             {
                 string hand = isRight ? "Right" : "Left";
                 Material ctrMat =
@@ -148,28 +146,10 @@ namespace VRTKLite.Controllers
                     ctrMat);
 
                 ctrGameObject.transform.SetParent(mount.transform, false);
-
-                if (deviceName.Contains("oculus touch controller openxr"))
+                if (deviceName.Contains("openxr"))
                 {
                     ctrGameObject.transform.Rotate(Vector3.right * 90f);
                 }
-            }
-            else if (deviceName.Contains("touch"))
-            {
-                string hand = isRight ? "right" : "left";
-                Material ctrMat =
-                    Resources.Load<Material>($"Meshes/OculusTouchForRift/Materials/OculusTouchForRift_Material");
-                ctrGameObject = TouchControllerModelAndChildren(
-                    $"Meshes/OculusTouchForRift/{hand}_touch_controller_model_skel");
-                ctrGameObject.transform.SetParent(mount.transform, false);
-            }
-            else if (deviceName.Contains("oculusgo"))
-            {
-                Material ctrMat = Resources.Load<Material>($"Meshes/OculusGoController/Materials/OculusGoController");
-                ctrGameObject = ControllerModel(
-                    $"Meshes/OculusGoController/OculusGoController",
-                    ctrMat);
-                ctrGameObject.transform.SetParent(mount.transform, false);
             }
             else if (deviceName.Contains("cosmos"))
             {
