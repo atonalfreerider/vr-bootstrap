@@ -71,6 +71,7 @@ namespace UnityEngine.XR.Hands.Samples.Gestures.DebugTools
                 {
                     foreach (var shapeCondition in condition.targets)
                     {
+                        // pinch is graphed here: 
                         var xrFingerShapeDebugGraph = m_XRAllFingerShapesDebugUI.xrFingerShapeDebugGraphs[(int)condition.fingerID];
                         var bar = xrFingerShapeDebugGraph.bars[(int)shapeCondition.shapeType];
                         bar.SetTargetAndTolerances(shapeCondition.desired, shapeCondition.upperTolerance, shapeCondition.lowerTolerance);

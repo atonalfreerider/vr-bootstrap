@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
+using UnityEngine.XR.Hands;
+using UnityEngine.XR.Hands.Gestures;
 
 namespace VRTKLite.SDK
 {
@@ -67,13 +69,18 @@ namespace VRTKLite.SDK
             }
             remove => loadedVRSetupChanged -= value;
         }
+        
+        List<XRHandSubsystem> xrHandSubsystems;
 
         void Start()
         {
             // iterate through setups
             List<XRInputSubsystem> xrInputSubsystems = new List<XRInputSubsystem>();
             SubsystemManager.GetSubsystems(xrInputSubsystems);
-
+            
+            xrHandSubsystems = new List<XRHandSubsystem>();
+            SubsystemManager.GetSubsystems(xrHandSubsystems);
+        
             List<XRDisplaySubsystem> xrDisplaySubsystems = new List<XRDisplaySubsystem>();
             SubsystemManager.GetSubsystems(xrDisplaySubsystems);
 
@@ -103,6 +110,28 @@ namespace VRTKLite.SDK
                     EnableAssociatedSDKSetup(sdkSetup);
                     IsVRMode = false;
                     return;
+                }
+            }
+        }
+
+        void Update()
+        {
+            foreach (XRHandSubsystem xrHandSubsystem in xrHandSubsystems)
+            {
+                XRHand hand = xrHandSubsystem.rightHand;
+
+                for (int fingerIndex = (int)XRHandFingerID.Thumb;
+                     fingerIndex <= (int)XRHandFingerID.Little;
+                     ++fingerIndex)
+                {
+                    XRFingerShape fingerShape = hand.CalculateFingerShape(
+                        (XRHandFingerID)fingerIndex, XRFingerShapeTypes.All);
+
+                    fingerShape.TryGetPinch(out float pinch);
+                    if (fingerIndex == 1)
+                    {
+                        Debug.Log(pinch);
+                    }
                 }
             }
         }

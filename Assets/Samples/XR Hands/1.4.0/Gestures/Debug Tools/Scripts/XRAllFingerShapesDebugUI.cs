@@ -54,6 +54,7 @@ namespace UnityEngine.XR.Hands.Samples.Gestures.DebugTools
                  fingerIndex <= (int)XRHandFingerID.Little;
                  ++fingerIndex)
             {
+                // useful
                 m_XRFingerShapes[fingerIndex] = hand.CalculateFingerShape(
                     (XRHandFingerID)fingerIndex, XRFingerShapeTypes.All);
                 UpdateFingerShapeUIs(fingerIndex);
